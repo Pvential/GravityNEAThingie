@@ -62,6 +62,9 @@ int renderGraphicsInAscii(int *ptrGrid){
     int i;
     for(i=0; i < 1024; i++){
         printf("%c", ptrGrid[i]);
+        if(i%32 == 0){
+            printf("\n");
+        }
     }
     return 0; // gold experience requiem???
 }
@@ -83,7 +86,7 @@ int main() {
     sun.pos.z = 0;
     earth.pos.x = 400;
     earth.pos.y = 0;
-    earth.pos.z = 0;
+    earth.pos.z = 0;a
     earth.velocity.y = 1;
     int *ptr = malloc(1024 * sizeof(char*)); // make the grid
     drawGrid(ptr);
@@ -95,6 +98,7 @@ int main() {
         float x = 32 * earth.pos.x/1000;
         float y = 32 * earth.pos.y/1000;
         draw(ptr, x, y);
+        system("cls")
         renderGraphicsInAscii(ptr);
     }
     free(ptr);
