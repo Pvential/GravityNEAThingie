@@ -86,7 +86,7 @@ int main() {
     sun.pos.z = 0;
     earth.pos.x = 400;
     earth.pos.y = 0;
-    earth.pos.z = 0;a
+    earth.pos.z = 0;
     earth.velocity.y = 1;
     int *ptr = malloc(1024 * sizeof(char*)); // make the grid
     drawGrid(ptr);
@@ -95,10 +95,9 @@ int main() {
         sun = processGravity(G, sun, earth);
         earth = processPosition(earth);
         sun = processPosition(sun);
-        float x = 32 * earth.pos.x/1000;
-        float y = 32 * earth.pos.y/1000;
+        float x = 32 * (earth.pos.x + 400)/800;
+        float y = 32 * (earth.pos.y + 400)/800;
         draw(ptr, x, y);
-        system("cls")
         renderGraphicsInAscii(ptr);
     }
     free(ptr);
