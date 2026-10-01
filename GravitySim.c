@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #define G 9
 struct Vec3 {
@@ -79,7 +80,7 @@ int draw(int *ptrGrid, int x, int y, char c){
 int main() {
     struct Planet earth;
     struct Planet sun;
-    earth.mass = 1;
+    earth.mass = 10;
     sun.mass = 50;
     sun.pos.x = 0;
     sun.pos.y = 0;
@@ -87,7 +88,7 @@ int main() {
     earth.pos.x = 400;
     earth.pos.y = 0;
     earth.pos.z = 0;
-    earth.velocity.y = 1;
+    earth.velocity.y = 0.5;
     int *ptr = malloc(1024 * sizeof(char*)); // make the grid
     drawGrid(ptr);
     float earthX = 0;
@@ -97,7 +98,6 @@ int main() {
     int i = 0;
     while (1) {
         i+=1;
-        //printf("%f, %f\n", x, y);
         draw(ptr, earthX, earthY, ' ');
         draw(ptr, sunX, sunY, ' ');
         earth = processGravity(G, earth, sun);
@@ -108,11 +108,11 @@ int main() {
         earthY = 32 * (earth.pos.y + 400)/800;
         sunX = 32 * (sun.pos.x + 400)/800;
         sunY = 32 * (sun.pos.y + 400)/800;
-        //printf("%f, %f\n", x, y);
         draw(ptr, earthX, earthY, 'E');
         draw(ptr, sunX, sunY, 'S');
         if (i % 10 == 0){
             renderGraphicsInAscii(ptr);
+            usleep(0.1 * (1000000));
         }
     }
     free(ptr);
