@@ -69,9 +69,9 @@ int renderGraphicsInAscii(int *ptrGrid){
     return 0; // gold experience requiem???
 }
 
-int draw(int *ptrGrid, int x, int y){
+int draw(int *ptrGrid, int x, int y, char c){
     int addr = findAddress(x, y);
-    ptrGrid[addr] = '#';
+    ptrGrid[addr] = c;
     return 0;
 }
 
@@ -90,15 +90,30 @@ int main() {
     earth.velocity.y = 1;
     int *ptr = malloc(1024 * sizeof(char*)); // make the grid
     drawGrid(ptr);
+    float earthX = 0;
+    float earthY = 0;
+    float sunX = 0;
+    float sunY = 0;
+    int i = 0;
     while (1) {
+        i+=1;
+        //printf("%f, %f\n", x, y);
+        draw(ptr, earthX, earthY, ' ');
+        draw(ptr, sunX, sunY, ' ');
         earth = processGravity(G, earth, sun);
         sun = processGravity(G, sun, earth);
         earth = processPosition(earth);
         sun = processPosition(sun);
-        float x = 32 * (earth.pos.x + 400)/800;
-        float y = 32 * (earth.pos.y + 400)/800;
-        draw(ptr, x, y);
-        renderGraphicsInAscii(ptr);
+        earthX = 32 * (earth.pos.x + 400)/800;
+        earthY = 32 * (earth.pos.y + 400)/800;
+        sunX = 32 * (sun.pos.x + 400)/800;
+        sunY = 32 * (sun.pos.y + 400)/800;
+        //printf("%f, %f\n", x, y);
+        draw(ptr, earthX, earthY, 'E');
+        draw(ptr, sunX, sunY, 'S');
+        if (i % 10 == 0){
+            renderGraphicsInAscii(ptr);
+        }
     }
     free(ptr);
     return 0;
