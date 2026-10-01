@@ -85,10 +85,11 @@ int main() {
     sun.pos.x = 0;
     sun.pos.y = 0;
     sun.pos.z = 0;
-    earth.pos.x = 400;
-    earth.pos.y = 0;
+    earth.pos.x = 200;
+    earth.pos.y = 100;
     earth.pos.z = 0;
-    earth.velocity.y = 0.5;
+    earth.velocity.y = 1;
+    earth.velocity.x = -1;
     int *ptr = malloc(1024 * sizeof(char*)); // make the grid
     drawGrid(ptr);
     float earthX = 0;
