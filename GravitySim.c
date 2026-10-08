@@ -4,15 +4,19 @@
 #include <unistd.h>
 
 #define G 9
+
+
 struct Vec3 {
     float x;
     float y;
     float z;
 };
+
 struct ForceVector {
     struct Vec3 direction;
     float magnitude;
 };
+
 struct Planet {
     struct Vec3 pos;
     struct Vec3 velocity;
@@ -20,6 +24,7 @@ struct Planet {
     struct ForceVector force;
     double mass;
 };
+
 struct Planet processPosition(struct Planet planet) {
     planet.pos.x += planet.velocity.x;
     planet.pos.y += planet.velocity.y;
@@ -49,7 +54,7 @@ int findAddress(int x, int y){
 }
 
 
-int drawGrid(int *ptrGrid){
+int resetGrid(int *ptrGrid){
     // 1024 characters, 32 * 32 grid#
     int i;
     for(i=0; i < 1024; i++){
@@ -71,46 +76,47 @@ int renderGraphicsInAscii(int *ptrGrid){
 }
 
 int draw(int *ptrGrid, int x, int y, char c){
+    
     int addr = findAddress(x, y);
+    if (addr > 1024){ return 0; }
     ptrGrid[addr] = c;
     return 0;
 }
 
+float fixCoords(float num){
+    return (32 * (num + 400)/800);
+}
+
 
 int main() {
+    // registering --objects-- structs
     struct Planet earth;
     struct Planet sun;
+
+    // start conditions
     earth.mass = 10;
     sun.mass = 50;
-    sun.pos.x = 0;
-    sun.pos.y = 0;
-    sun.pos.z = 0;
     earth.pos.x = 200;
     earth.pos.y = 100;
-    earth.pos.z = 0;
-    earth.velocity.y = 1;
+    //earth.velocity.y = 1;
     earth.velocity.x = -1;
+
+    // ooo scary pointers!!!!
     int *ptr = malloc(1024 * sizeof(char*)); // make the grid
-    drawGrid(ptr);
-    float earthX = 0;
-    float earthY = 0;
-    float sunX = 0;
-    float sunY = 0;
+
     int i = 0;
     while (1) {
         i+=1;
-        draw(ptr, earthX, earthY, ' ');
-        draw(ptr, sunX, sunY, ' ');
+        resetGrid(ptr);
+        
+        //sun = processGravity(G, sun, earth);
         earth = processGravity(G, earth, sun);
-        sun = processGravity(G, sun, earth);
+        
         earth = processPosition(earth);
-        sun = processPosition(sun);
-        earthX = 32 * (earth.pos.x + 400)/800;
-        earthY = 32 * (earth.pos.y + 400)/800;
-        sunX = 32 * (sun.pos.x + 400)/800;
-        sunY = 32 * (sun.pos.y + 400)/800;
-        draw(ptr, earthX, earthY, 'E');
-        draw(ptr, sunX, sunY, 'S');
+        //sun = processPosition(sun);
+        
+        draw(ptr, fixCoords(earth.pos.x), fixCoords(earth.pos.y), 'E');
+        draw(ptr, fixCoords(sun.pos.x), fixCoords(sun.pos.y), 'S');
         if (i % 10 == 0){
             renderGraphicsInAscii(ptr);
             usleep(0.1 * (1000000));
